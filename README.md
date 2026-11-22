@@ -1,45 +1,112 @@
-# Traffic Congestion Prediction Using ML
+# 🚦 Traffic Congestion Prediction Dashboard
 
-An end-to-end machine learning project that forecasts traffic volume and classifies urban road congestion levels using historical traffic, weather, and event data. The project features a modular Python pipeline built with **scikit-learn** and an interactive web dashboard powered by **Streamlit**.
-# 🚦 Traffic Congestion Prediction
+An interactive, machine-learning-based web application that predicts traffic congestion and provides traffic-related insights through a user-friendly Streamlit dashboard.
+
+The project combines machine learning, data visualization, live GPS location detection, and TomTom Traffic API integration to help users understand traffic conditions and explore congestion patterns.
+
+---
 
 ## 📌 Project Overview
 
-Traffic Congestion Prediction is a machine learning-based web application designed to predict traffic conditions using historical traffic data and machine learning algorithms.
+Traffic congestion is a major problem in urban areas. It leads to longer travel times, fuel consumption, and delays.
 
-The application helps users understand traffic patterns and estimate congestion levels. It provides an interactive interface built with Python and Streamlit.
+This project aims to analyze traffic-related data and predict congestion levels using machine learning models. It also provides an interactive dashboard where users can explore data, view model performance, and check traffic conditions based on their current GPS location or a searched location.
 
-## 🎯 Project Objectives
+## 🎯 Objectives
 
-- Predict traffic congestion using machine learning.
-- Analyze historical traffic data.
-- Compare different machine learning models.
-- Provide an easy-to-use web interface.
-- Display prediction results and model performance.
+- Predict traffic congestion using machine learning techniques.
+- Analyze traffic patterns using historical traffic data.
+- Compare machine learning model performance.
+- Display traffic insights through interactive visualizations.
+- Detect the user's current location using GPS.
+- Search for locations and view their traffic conditions.
+- Integrate real-time traffic information using the TomTom API.
 
-## ✨ Features
+## ✨ Key Features
 
-- Interactive Streamlit dashboard.
-- Traffic congestion prediction.
-- Machine learning model integration.
-- Regression and classification models.
-- Data visualization and analysis.
-- Model performance comparison.
-- CSV-based results and reports.
+### 1. Home Dashboard
+- Project overview and introduction.
+- Summary of traffic prediction features.
+- Easy navigation between application modules.
+
+### 2. Traffic Congestion Prediction
+- Predict traffic conditions using trained machine learning models.
+- Accept relevant input features.
+- Display prediction results through the dashboard.
+
+### 3. Data Explorer
+- Explore the traffic dataset.
+- View data summaries and traffic patterns.
+- Analyze data using interactive charts.
+
+### 4. Model Performance
+- Evaluate and compare machine learning models.
+- Display model performance metrics.
+- Visualize model comparison results.
+
+### 5. Traffic Insights
+- Understand traffic trends and patterns.
+- Explore important observations from the dataset.
+- View graphical representations of traffic information.
+
+### 6. Live GPS Traffic
+- Detect the user's current location through browser geolocation.
+- Retrieve the selected location's traffic information.
+- Display current speed and free-flow speed.
+- Show estimated traffic congestion conditions.
+
+### 7. Location-Based Traffic Search
+- Search for a location by name.
+- Select a location directly on an interactive map.
+- Retrieve traffic information for the selected coordinates.
+- Display current speed, free-flow speed, and congestion classification.
+
+## 🤖 Machine Learning Approach
+
+The project uses five machine learning models to analyze traffic-related data and generate congestion predictions.
+
+The trained models are used to learn patterns from the dataset and predict traffic conditions based on input features.
+
+**Purpose of machine learning:**
+- Learn traffic patterns from historical data.
+- Identify relationships between traffic features.
+- Predict traffic conditions.
+- Compare model performance.
+
+*Note: Add the exact names of your five models and their verified accuracy values here so viewers can understand the model comparison.*
+
+## 🗺️ Live Traffic API Integration
+
+This project integrates the **TomTom API** for location search and live traffic information.
+
+| API / Technology | Purpose |
+|---|---|
+| TomTom Places Search API | Search for locations |
+| TomTom Traffic API | Retrieve traffic flow information |
+| Browser Geolocation | Detect current user location |
+| Folium | Display interactive maps |
+| Streamlit-Folium | Integrate maps into Streamlit |
+
+**Important:** Machine learning predictions and TomTom live traffic information are separate features. TomTom provides traffic flow data, while the trained ML models provide predictions based on the project's dataset and input features.
 
 ## 🛠️ Technologies Used
 
 | Technology | Purpose |
 |---|---|
 | Python | Main programming language |
-| Streamlit | Web application interface |
+| Pandas | Data manipulation |
 | NumPy | Numerical operations |
-| Pandas | Data processing |
 | Scikit-learn | Machine learning |
-| Joblib | Model serialization |
-| TensorFlow | Deep learning |
-| Keras | Neural network development |
+| Streamlit | Web application development |
+| Plotly | Interactive data visualization |
 | Matplotlib | Data visualization |
+| Seaborn | Statistical visualization |
+| Folium | Interactive maps |
+| Streamlit-Folium | Map integration |
+| Requests | API communication |
+| TomTom API | Location search and traffic information |
+| Joblib | Saving and loading trained models |
+| Git & GitHub | Version control and project hosting |
 
 ## 📂 Project Structure
 
@@ -47,256 +114,194 @@ The application helps users understand traffic patterns and estimate congestion 
 traffic-congestion-prediction/
 │
 ├── app.py
-├── dashboard_utils.py
+├── gps_traffic.py
+├── location_traffic.py
 ├── requirements.txt
 ├── README.md
+├── .gitignore
+│
+├── .streamlit/
+│   └── secrets.toml
+│
+├── dataset/
+│   └── traffic_dataset.csv
 │
 ├── models/
-│   ├── gb_regression.pkl
-│   ├── gradient_boosting_reg.pkl
-│   ├── lasso_regression_reg.pkl
-│   ├── linear_regression_reg.pkl
-│   ├── ridge_regression_reg.pkl
-│   ├── random_forest_reg.pkl
-│   ├── random_forest_clf.pkl
-│   ├── logistic_regression_clf.pkl
-│   ├── lr_classification.pkl
-│   └── svm_clf.pkl
+│   └── trained model files
 │
-├── data/
-│
-├── uploads/
-│
-└── .gitignore
+└── other project files
 ```
 
-*Note: The folder structure above is illustrative. Adjust it to match your actual project files.*
+*The dataset and model folder names above are examples. Adjust this structure to match the actual files in your repository.*
 
-## 💻 Installation and Setup
+## ⚙️ Installation and Setup
 
-### 1. Clone the Repository
+Follow these steps to run the project on your local computer.
+
+### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-GITHUB-USERNAME/traffic-congestion-prediction.git
+git clone https://github.com/DolaiBharath/traffic_congestion_prediction18.git
 ```
 
-### 2. Open the Project Folder
+### Step 2: Open the Project Folder
 
 ```bash
-cd traffic-congestion-prediction
+cd traffic_congestion_prediction18
 ```
 
-### 3. Create a Virtual Environment
+### Step 3: Create a Virtual Environment
 
 ```bash
 python -m venv .venv
 ```
 
-### 4. Activate the Virtual Environment
+### Step 4: Activate the Virtual Environment
 
 **Windows PowerShell:**
 
 ```powershell
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 ```
 
-**Windows Command Prompt:**
+If PowerShell blocks activation, run:
 
-```cmd
-.venv\Scripts\activate
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
-### 5. Install Required Libraries
+Then activate the environment again.
+
+### Step 5: Install Required Libraries
 
 ```bash
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 6. Run the Application
+### Step 6: Configure the TomTom API Key
+
+Create a file named `secrets.toml` inside the `.streamlit` folder.
+
+Folder location:
+
+```text
+.streamlit/secrets.toml
+```
+
+Add your own TomTom API key:
+
+```toml
+TOMTOM_API_KEY = "YOUR_TOMTOM_API_KEY"
+```
+
+Replace the placeholder with your own API key.
+
+**Security:** Never upload your actual API key to GitHub. Keep `.streamlit/secrets.toml` in `.gitignore`.
+
+### Step 7: Run the Application
 
 ```bash
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
-The application will open in your browser, usually at:
+The application will open in your browser.
+
+Local URL:
 
 ```text
 http://localhost:8501
 ```
 
-## 🤖 Machine Learning Models
+## 🔑 API Configuration
 
-The project includes regression and classification models.
+To use the live location search and traffic features:
 
-### Regression Models
+1. Create an account on the TomTom Developer Portal.
+2. Generate an API key.
+3. Enable the required Places Search and Traffic API products for your key.
+4. Configure the key in `.streamlit/secrets.toml`.
+5. Restart the Streamlit application.
 
-- Linear Regression
-- Ridge Regression
-- Lasso Regression
-- Random Forest Regressor
-- Gradient Boosting Regressor
+TomTom API access and usage are subject to the provider's account limits and terms.
 
-### Classification Models
+## ☁️ Deployment
 
-- Logistic Regression
-- Random Forest Classifier
-- Support Vector Machine (SVM)
+This application can be deployed using Streamlit Community Cloud.
 
-*Actual model availability depends on the trained model files included in the repository.*
+### Deployment Steps
 
-## 📊 Model Evaluation
+1. Push the project to a GitHub repository.
+2. Visit https://share.streamlit.io/
+3. Sign in using your GitHub account.
+4. Select the project repository.
+5. Choose `app.py` as the main application file.
+6. Open the application settings and configure the required secrets.
+7. Add your TomTom API key in the deployment secrets using TOML format:
 
-The project includes result files for evaluating model performance.
+```toml
+TOMTOM_API_KEY = "YOUR_TOMTOM_API_KEY"
+```
 
-Examples:
+8. Deploy the application.
 
-- Regression performance results.
-- Classification performance results.
-- Test dataset evaluation.
+**Note:** Ensure that your dataset, trained model files, and other required project files are included in GitHub. Do not upload private API keys or secret configuration files.
 
-## 📁 Dataset
+## 📊 Expected Application Workflow
 
-The application uses traffic-related datasets for data processing, analysis, and prediction.
+```text
+        User
+         |
+         v
+   Streamlit Dashboard
+         |
+         v
+   Select a Feature
+         |
+    +----+-------------------+
+    |                        |
+    v                        v
+ML Predictions          Live Traffic
+    |                        |
+    v                        v
+Trained ML Models       GPS / Location Search
+    |                        |
+    v                        v
+Prediction Results      TomTom Traffic API
+    |                        |
+    +-----------+------------+
+                |
+                v
+        Dashboard Results
+```
 
-Place the required dataset files in the appropriate project directory before running the application.
+## 🔒 Security
+
+- API keys are stored using Streamlit secrets.
+- Secret configuration files should not be committed to GitHub.
+- The `.gitignore` file excludes sensitive files and unnecessary development files.
+- Never publish private credentials in source code, screenshots, or documentation.
 
 ## 🚀 Future Enhancements
 
-- Real-time traffic data integration.
-- Interactive traffic visualization.
-- Live traffic congestion monitoring.
-- Improved prediction accuracy.
-- Map-based traffic visualization.
-- Cloud deployment.
-
-## 🔐 Important Notes
-
-- Do not upload virtual environments such as `.venv/`.
-- Do not upload passwords, API keys, or secret credentials.
-- Use Git LFS for large machine learning model files when required.
-- Ensure actual model files are available before running predictions.
-- Use compatible Python and scikit-learn versions for saved models.
+- Improve traffic prediction using additional traffic datasets.
+- Add more geographical coverage.
+- Improve location detection accuracy.
+- Enhance interactive traffic visualization.
+- Integrate additional traffic-related features.
+- Improve model performance through further experimentation.
 
 ## 👨‍💻 Author
 
-**Dolai Bharath**
+**Bharath Dolai**
 
-GitHub: https://github.com/YOUR-GITHUB-USERNAME
+GitHub: https://github.com/DolaiBharath
 
-## 📜 License
+## 📄 License
 
-This project is developed for educational and learning purposes.
+This project is developed for educational and academic purposes.
 
-You may add an open-source license if you intend to distribute the project under specific terms.
-
----
-
-⭐ If you find this project useful, consider giving the repository a star on GitHub!
----
-
-## Key Features
-
-* **Dual Machine Learning Models:**
-  * **Regression:** Predicts continuous numeric traffic volume (`R² ≈ 0.75`).
-  * **Classification:** Categorizes road conditions into congestion severity levels (`~82% accuracy`).
-* **End-to-End Modular Pipeline:** Clean separation of data collection, preprocessing, exploratory data analysis (EDA), model training, and evaluation inside `src/`.
-* **Interactive Streamlit Dashboard:** Real-time congestion predictions, interactive controls, and visual analytics served via `app.py`.
-* **Pre-Trained Models Included:** Ready-to-run `.pkl` model files stored in `models/` for instant inference without retraining.
+A suitable open-source license can be added to the repository if you decide to distribute the project under specific reuse terms.
 
 ---
 
-## Project Structure
-
-```text
-traffic-congestion-prediction/
-├── app.py                  # Interactive Streamlit web dashboard
-├── dashboard_utils.py      # Model loading, feature engineering, and UI helpers
-├── requirements.txt        # Python package dependencies
-├── .streamlit/
-│   └── config.toml         # Custom Streamlit theme and server configuration
-├── src/                    # Modular ML pipeline scripts
-│   ├── data_collection.py
-│   ├── data_preprocessing.py
-│   ├── exploratory_analysis.py
-│   ├── model_training.py
-│   ├── model_evaluation.py
-│   └── utils.py
-├── Datasets/               # Raw data, train/val/test splits, and dataset notes
-├── data/processed/         # Cleaned and feature-engineered intermediate data
-├── models/                 # Saved .pkl models and evaluation metrics CSVs
-├── visualizations/         # Generated EDA and model performance charts (PNG)
-├── REPORT_EXECUTIVE.md     # Executive summary of findings
-├── REPORT.md               # Detailed technical documentation
-└── README.md               # Project overview and setup guide
-```
-
----
-
-## Prerequisites
-
-Ensure you have the following installed on your machine:
-* **Python 3.9+**
-* **Git**
-
----
-
-## Installation & Quick Start
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com
-   cd traffic-congestion-prediction
-   ```
-
-2. **Create and Activate a Virtual Environment**
-   * **Windows (PowerShell):**
-     ```powershell
-     python -m venv venv
-     .\venv\Scripts\Activate.ps1
-     ```
-   * **macOS / Linux:**
-     ```bash
-     python3 -m venv venv
-     source venv/bin/activate
-     ```
-
-3. **Install Dependencies**
-   ```bash
-   python -m pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-
-4. **Launch the Streamlit Dashboard**
-   ```bash
-   streamlit run app.py
-   ```
-   Open your browser to `http://localhost:8501` to interact with the application.
-
----
-
-## Re-Running the ML Pipeline (Optional)
-
-If you update the raw datasets or modify feature engineering, run the pipeline scripts sequentially to regenerate processed files, charts, and trained models:
-
-```bash
-python src/data_collection.py
-python src/data_preprocessing.py
-python src/exploratory_analysis.py
-python src/model_training.py
-python src/model_evaluation.py
-```
-
----
-
-## Tech Stack
-
-* **Language:** Python
-* **Machine Learning:** scikit-learn, NumPy, pandas
-* **Visualization:** Matplotlib, Seaborn, Plotly
-* **Web Interface:** Streamlit
-#� �t�r�a�f�f�i�c�-�c�o�n�g�e�s�t�i�o�n�-�p�r�e�d�i�c�t�i�o�n�
-�
-�
-#   t r a f f i c _ c o n g e s t i o n _ p r e d i c t i o n 1 8  
- 
+⭐ If you find this project useful, feel free to explore the repository and learn more about machine learning-based traffic congestion prediction.
