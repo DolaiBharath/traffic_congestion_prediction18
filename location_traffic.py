@@ -6,16 +6,23 @@ import folium
 from streamlit_folium import st_folium
 
 
-# Get TomTom API key
+# ==========================================
+# GET TOMTOM API KEY
+# ==========================================
+
 def get_api_key():
     try:
         return st.secrets["TOMTOM_API_KEY"]
+
     except Exception:
         st.error("TomTom API key not found.")
         return None
 
 
-# Search for a location using TomTom Search API
+# ==========================================
+# SEARCH LOCATION USING PLACES SEARCH API
+# ==========================================
+
 def search_location(place):
 
     api_key = get_api_key()
@@ -23,17 +30,30 @@ def search_location(place):
     if not api_key:
         return None
 
-    url = "https://api.tomtom.com/search/2/geocode/" + requests.utils.quote(place) + ".json"
+    url = "https://api.tomtom.com/maps/orbis/places/discover"
 
-    params = {
-        "key": api_key,
-        "limit": 1
+    headers = {
+        "TomTom-Api-Key": api_key,
+        "TomTom-Api-Version": "3",
+        "Attributes": "results(title,position,address)",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "query": place,
+        "maxResults": 5,
+        "geopoliticalView": "IN",
+        "filters": {
+            "countryCodesIso2": ["IN"]
+        }
     }
 
     try:
-        response = requests.get(
+
+        response = requests.post(
             url,
-            params=params,
+            headers=headers,
+            json=payload,
             timeout=15
         )
 
@@ -42,21 +62,30 @@ def search_location(place):
         results = response.json().get("results", [])
 
         if results:
-            position = results[0]["position"]
 
-            return (
-                position["lat"],
-                position["lon"]
-            )
+            coordinates = results[0]["position"]["coordinates"]
+
+            longitude = coordinates[0]
+            latitude = coordinates[1]
+
+            return latitude, longitude
 
         return None
 
     except requests.exceptions.RequestException as error:
+
         st.error(f"Location search error: {error}")
+
+        if error.response is not None:
+            st.write("TomTom response:", error.response.text)
+
         return None
 
 
-# Fetch live traffic
+# ==========================================
+# FETCH LIVE TRAFFIC
+# ==========================================
+
 def get_selected_traffic(latitude, longitude):
 
     api_key = get_api_key()
@@ -76,6 +105,7 @@ def get_selected_traffic(latitude, longitude):
     }
 
     try:
+
         response = requests.get(
             url,
             params=params,
@@ -87,11 +117,16 @@ def get_selected_traffic(latitude, longitude):
         return response.json().get("flowSegmentData")
 
     except requests.exceptions.RequestException as error:
+
         st.error(f"Traffic API error: {error}")
+
         return None
 
 
-# Display selected traffic
+# ==========================================
+# DISPLAY SELECTED LOCATION TRAFFIC
+# ==========================================
+
 def display_traffic(latitude, longitude):
 
     traffic = get_selected_traffic(
@@ -100,7 +135,11 @@ def display_traffic(latitude, longitude):
     )
 
     if not traffic:
-        st.warning("Traffic information unavailable for this location.")
+
+        st.warning(
+            "Traffic information unavailable for this location."
+        )
+
         return
 
     current_speed = traffic.get("currentSpeed")
@@ -114,52 +153,80 @@ def display_traffic(latitude, longitude):
     col1, col2 = st.columns(2)
 
     with col1:
+
         st.metric(
             "Current Speed",
             f"{current_speed} km/h"
-            if current_speed is not None else "Unavailable"
+            if current_speed is not None
+            else "Unavailable"
         )
 
     with col2:
+
         st.metric(
             "Free Flow Speed",
             f"{free_flow_speed} km/h"
-            if free_flow_speed is not None else "Unavailable"
+            if free_flow_speed is not None
+            else "Unavailable"
         )
+
+    # Traffic classification
 
     if current_speed is not None and free_flow_speed is not None:
 
         if free_flow_speed <= 0:
-            st.warning("Unable to determine traffic condition.")
+
+            st.warning(
+                "Unable to determine traffic condition."
+            )
 
         else:
+
             ratio = current_speed / free_flow_speed
 
             if ratio >= 0.75:
+
                 st.success("Low Traffic")
 
             elif ratio >= 0.40:
+
                 st.warning("Moderate Traffic")
 
             else:
+
                 st.error("Heavy Traffic")
+
+    # Additional traffic information
 
     travel_time = traffic.get("currentTravelTime")
     confidence = traffic.get("confidence")
 
     if travel_time is not None:
+
         st.metric(
             "Travel Time",
             f"{travel_time} seconds"
         )
 
     if confidence is not None:
+
         st.write(
             f"TomTom Confidence: {confidence * 100:.1f}%"
         )
 
+    road_closure = traffic.get("roadClosure")
 
-# Main feature
+    if road_closure is not None:
+
+        st.write(
+            f"Road Closure: {road_closure}"
+        )
+
+
+# ==========================================
+# MAIN LOCATION TRAFFIC FEATURE
+# ==========================================
+
 def show_location_traffic():
 
     st.header("Traffic Check by Location")
@@ -169,29 +236,49 @@ def show_location_traffic():
         "to check its live traffic."
     )
 
-    # Location search
+    # --------------------------------------
+    # LOCATION SEARCH
+    # --------------------------------------
+
     search_text = st.text_input(
         "Search a road or location",
-        placeholder="Example: Hitech City, Hyderabad"
+        placeholder="Example: Kaza, Guntur, Andhra Pradesh"
     )
 
     if st.button("Search Location"):
 
         if search_text.strip():
 
-            result = search_location(search_text.strip())
+            result = search_location(
+                search_text.strip()
+            )
 
             if result:
+
                 st.session_state.selected_traffic_location = result
-                st.success("Location found successfully!")
+
+                st.success(
+                    "Location found successfully!"
+                )
+
+                st.rerun()
 
             else:
-                st.warning("Location not found.")
+
+                st.warning(
+                    "Location not found. Please try another search."
+                )
 
         else:
-            st.warning("Please enter a location.")
 
-    # Default map center
+            st.warning(
+                "Please enter a location."
+            )
+
+    # --------------------------------------
+    # DEFAULT MAP LOCATION
+    # --------------------------------------
+
     default_location = (17.3850, 78.4867)
 
     selected = st.session_state.get(
@@ -199,7 +286,10 @@ def show_location_traffic():
         default_location
     )
 
-    # Create map
+    # --------------------------------------
+    # CREATE INTERACTIVE MAP
+    # --------------------------------------
+
     traffic_map = folium.Map(
         location=selected,
         zoom_start=13
@@ -211,15 +301,22 @@ def show_location_traffic():
         popup="Check traffic here"
     ).add_to(traffic_map)
 
-    # Display interactive map
+    # --------------------------------------
+    # DISPLAY MAP
+    # --------------------------------------
+
     map_result = st_folium(
         traffic_map,
         height=500,
         width=None,
-        key="traffic_location_map"
+        key="traffic_location_map",
+        returned_objects=["last_clicked"]
     )
 
-    # Capture clicked location
+    # --------------------------------------
+    # CAPTURE CLICKED LOCATION
+    # --------------------------------------
+
     if map_result and map_result.get("last_clicked"):
 
         clicked = map_result["last_clicked"]
@@ -231,19 +328,30 @@ def show_location_traffic():
 
         st.session_state.selected_traffic_location = clicked_location
 
-    # Show selected coordinates
+        st.rerun()
+
+    # --------------------------------------
+    # DISPLAY SELECTED COORDINATES
+    # --------------------------------------
+
     selected = st.session_state.get(
         "selected_traffic_location",
         default_location
     )
 
+    st.subheader("Selected Location")
+
     st.write(
-        f"Selected Latitude: {selected[0]:.6f}"
+        f"Latitude: {selected[0]:.6f}"
     )
 
     st.write(
-        f"Selected Longitude: {selected[1]:.6f}"
+        f"Longitude: {selected[1]:.6f}"
     )
+
+    # --------------------------------------
+    # CHECK TRAFFIC
+    # --------------------------------------
 
     if st.button("Check Traffic at Selected Location"):
 
